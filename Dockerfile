@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos:centos7
 MAINTAINER "Peter Kuczaj" <peter@crocusplains.com>
 
 ADD run-nginx.sh /run-nginx.sh
