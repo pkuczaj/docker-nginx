@@ -9,10 +9,8 @@ RUN yum update -y \
  && wget -q \
         http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
         https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
- && rpm -Uvh \
-        remi-release-7.rpm \
-        epel-release-latest-7.noarch.rpm \
- && yum-config-manager --enable remi-php71 \
+ && yum install -y \
+        epel-release \
  && yum install -y \
         nginx \
         php-fpm \
