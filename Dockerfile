@@ -23,7 +23,9 @@ RUN yum update -y \
         drush \
  && yum clean all \
  && echo "cgi.fix_pathinfo=0" >> /etc/php.ini \
- && systemctl enable php-fpm
+ && systemctl enable php-fpm \
+ && mkdir -p /var/lib/php/session \
+ && chmod 777 /var/lib/php/session
 
 EXPOSE 80 443
 
