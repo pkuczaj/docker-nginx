@@ -17,6 +17,7 @@ RUN yum update -y \
         nginx \
         php-fpm \
         php-mbstring \
+        php-mcrypt \
         php-mysqlnd \
         php-gd \
         php-pear \
