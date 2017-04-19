@@ -22,6 +22,7 @@ RUN yum update -y \
         php-pecl-zip \
         mysql \
         which \
+        unzip \
         drush \
  && yum clean all \
  && echo "cgi.fix_pathinfo=0" >> /etc/php.ini \
