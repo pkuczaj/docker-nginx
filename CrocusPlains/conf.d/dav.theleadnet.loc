@@ -1,0 +1,78 @@
+        server {
+                client_max_body_size 250M;
+                listen 80;
+                server_name dav.theleadnet.loc;
+                index index.php;
+
+                ### SET WEB ROOT ###
+                root /var/www/theleadnet.loc/cardDAV;
+
+                fastcgi_param HTTP_AUTHORIZATION $http_authorization;
+                rewrite /(.*) /index.php last;
+
+
+
+                location ~* \.(jpg|jpeg|gif|css|png|js|ico|html)$ {
+                        access_log off;
+                        expires max;
+                }
+
+                location ~ \.php$ {
+                        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                        # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+
+                        # With php5-cgi alone:
+                        fastcgi_pass 127.0.0.1:9000;
+                        # With php5-fpm:
+                        #fastcgi_pass unix:/var/run/php5-fpm.sock;
+                        fastcgi_index index.php;
+                        include fastcgi_params;
+
+                        fastcgi_param  SCRIPT_FILENAME  /var/www/theleadnet.loc/cardDAV/$fastcgi_script_name;
+                }
+
+                location ~ /\.ht {
+                        deny  all;
+                }
+        }
+
+        server {
+                client_max_body_size 250M;
+                listen 443 ssl;
+                server_name dav.theleadnet.loc;
+                index index.php;
+
+                ssl                     on;
+                ssl_certificate         /usr/local/etc/nginx/ssl/dav.theleadnet.loc.crt;
+                ssl_certificate_key     /usr/local/etc/nginx/ssl/dav.theleadnet.loc.key;
+
+                ### SET WEB ROOT ###
+                root /var/www/theleadnet.loc/cardDAV;
+
+				fastcgi_param HTTP_AUTHORIZATION $http_authorization;
+                rewrite /(.*) /index.php last;
+
+				location ~* \.(jpg|jpeg|gif|css|png|js|ico|html)$ {
+                        access_log off;
+                        expires max;
+                }
+
+                location ~ \.php$ {
+                        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                        # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+
+                        # With php5-cgi alone:
+                        fastcgi_pass 127.0.0.1:9000;
+                        # With php5-fpm:
+                        #fastcgi_pass unix:/var/run/php5-fpm.sock;
+                        fastcgi_index index.php;
+                        include fastcgi_params;
+
+                        fastcgi_param  SCRIPT_FILENAME  /var/www/theleadnet.loc/cardDAV/$fastcgi_script_name;
+                }
+
+                location ~ /\.ht {
+                        deny  all;
+                }
+        }
+

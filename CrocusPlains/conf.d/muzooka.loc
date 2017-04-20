@@ -1,0 +1,80 @@
+        server {
+                client_max_body_size 2M;
+                listen 80;
+                server_name muzooka.loc;
+
+                rewrite  ^/(.*)$  https://muzooka.loc/$1  permanent;
+        }
+
+        server {
+                client_max_body_size 250M;
+                listen 443 ssl;
+                server_name muzooka.loc;
+
+		ssl			on;
+		ssl_certificate		/usr/local/etc/nginx/ssl/muzooka.loc.crt;
+		ssl_certificate_key	/usr/local/etc/nginx/ssl/muzooka.loc.key;
+
+                ### SET WEB ROOT ###
+                root /var/www/Muzooka/muzooka-site;
+
+		rewrite ^/a/media/(.*)$ /_resources/about/media/$1;
+		rewrite ^/pages/tos_privacy.html(.*)#(.*)$ /a/legal$1;
+                rewrite ^/legal(.*)$ /a/legal$1;
+
+                location /config {
+                        deny all;
+                }
+
+                location / {
+                        set $agent $http_user_agent;
+                        if ($request_uri ~ ^/_resources/(.*)$) {
+                                set $agent '';
+                        }
+
+                        # Rewrite to static for mobile content
+                        #if ($http_user_agent ~* '(iPhone|iPod|Android.*Mobile)') {
+                        #        rewrite ^/a/legal(.*)$ /_resources/templates/modal_legal.html last;
+                        #}
+
+                        #if ($agent ~* '(iPhone|iPod)') {
+                        #        rewrite ^/(.*)$ /_resources/templates/modal_mobile_ios.html last;
+                        #}
+
+                        #if ($agent ~* '(Android|Android.*Mobile)') {
+                        #        rewrite ^/(.*)$ /_resources/templates/modal_mobile_android.html last;
+                        #}
+
+                        # This is cool because no php is touched for static content
+                        try_files $uri @rewrite;
+                }
+
+                location @rewrite {
+                        # Some modules enforce no slash (/) at the end of the URL
+                        # Else this rewrite block wouldn't be needed (GlobalRedirect)
+                        rewrite ^/(.*)$ /index.php?q=$1;
+                }
+
+                location ~* \.(jpg|jpeg|gif|css|png|js|ico|html)$ {
+                        access_log off;
+                        expires max;
+                }
+
+                location ~ \.php$ {
+                	fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                	# NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+
+                	# With php5-cgi alone:
+                	fastcgi_pass 127.0.0.1:9000;
+                	# With php5-fpm:
+                	#fastcgi_pass unix:/var/run/php5-fpm.sock;
+                	fastcgi_index index.php;
+                	include fastcgi_params;
+
+			fastcgi_param  SCRIPT_FILENAME  /var/www/Muzooka/muzooka-site/$fastcgi_script_name;
+                }
+
+                location ~ /\.ht {
+                        deny  all;
+                }
+        }
