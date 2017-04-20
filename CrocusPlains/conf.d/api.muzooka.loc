@@ -1,0 +1,21 @@
+        server {
+                listen 80;
+                server_name api.muzooka.loc;
+
+                rewrite  ^/(.*)$  https://api.muzooka.loc/$1  permanent;
+        }
+
+        server {
+                listen 443 ssl;
+	        server_name api.muzooka.loc;
+
+                ssl                     on;
+                ssl_certificate         /usr/local/etc/nginx/ssl/wildcard/muzooka.loc.crt;
+                ssl_certificate_key     /usr/local/etc/nginx/ssl/wildcard/muzooka.loc.key;
+
+                location / {
+                        proxy_set_header   X-Real-IP $remote_addr;
+                        proxy_set_header   Host      $http_host;
+                        proxy_pass         http://127.0.0.1:3000;
+                }
+        }
