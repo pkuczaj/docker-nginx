@@ -1,6 +1,7 @@
 FROM centos:7
 MAINTAINER "Peter Kuczaj" <peter@crocusplains.com>
 
+ADD etc /etc
 ADD run-nginx.sh /run-nginx.sh
 
 RUN yum update -y \
