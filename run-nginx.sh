@@ -2,7 +2,10 @@
 
 set -e
 
-echo "127.0.0.1 oluaws.cxtysvkkvvpr.us-east-1.rds.amazonaws.com" >> /etc/hosts
+if [ -f "/etc/nginx/conf.d/hosts" ]
+then
+  echo /etc/nginx/conf.d/hosts >> /etc/hosts
+fi
 
 /usr/sbin/php-fpm -D
 
