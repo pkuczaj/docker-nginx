@@ -7,6 +7,8 @@ then
   cat /etc/nginx/conf.d/hosts >> /etc/hosts
 fi
 
+/usr/sbin/postfix start
+
 /usr/sbin/php-fpm
 
 nginx -g "daemon off;"
