@@ -1,8 +1,0 @@
-master:
-  stage: deploy
-  script: sudo /runners/docker/buildNginx
-  tags:
-    - webServer
-  only:
-    - master
-
