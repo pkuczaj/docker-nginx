@@ -3,6 +3,4 @@ master:
   script: sudo /runners/docker/buildNginx
   tags:
     - webServer
-  only:
-    - master
 
