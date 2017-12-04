@@ -31,6 +31,7 @@ RUN yum update -y \
  && mkfifo /var/spool/postfix/public/pickup ps aux \
  && yum clean all \
  && echo "cgi.fix_pathinfo=0" >> /etc/php.ini \
+ && sed -i 's/expose_php = On/expose_php = Off/gi' /etc/php.ini \
  && systemctl enable php-fpm
 
 EXPOSE 80 443
