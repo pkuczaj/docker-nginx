@@ -3,6 +3,7 @@ MAINTAINER "Peter Kuczaj" <peter@crocusplains.com>
 
 ADD etc /etc
 ADD run-nginx.sh /run-nginx.sh
+ADD healthcheck.sh /
 
 RUN yum update -y \
  && yum install -y \
@@ -35,5 +36,7 @@ RUN yum update -y \
  && chmod 777 /var/lib/php/session
 
 EXPOSE 80 443
+
+HEALTHCHECK --retries=3 --interval=15s --timeout=5s CMD /healthcheck.sh
 
 CMD [ "/run-nginx.sh" ]
